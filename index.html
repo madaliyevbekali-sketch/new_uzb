@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>O‘ZBEKISTON KELAJAGI</title>
+<style>
+:root{color-scheme:dark;--bg:#050a1a;--gold:#e5c066;--blue:#6cc4ff;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.15);--t:#eef3ff;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:70px}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(900px 500px at 70% -10%,#12307a55,transparent),radial-gradient(700px 500px at 0 100%,#0a1f4d66,transparent),var(--bg);color:var(--t);min-height:100vh}
+nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:calc(10px + env(safe-area-inset-top,0px)) 5vw 10px;backdrop-filter:blur(14px);background:#050a1acc;border-bottom:1px solid var(--line)}
+.logo{font-weight:800;letter-spacing:.14em;color:var(--gold)}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--line);color:var(--t);background:var(--card);padding:10px 16px;font-weight:600;transition:.2s}
+button:hover{transform:translateY(-2px);border-color:var(--gold)}button.pri{background:linear-gradient(135deg,#e5c066,#b88a2c);color:#1a1200;border:0}button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+section{padding:36px 5vw;max-width:1100px;margin:auto;animation:in .6s ease}@keyframes in{from{opacity:0;transform:translateY(14px)}}
+.hero{text-align:center}.hero h1{font-size:clamp(2.1rem,8vw,4.8rem);margin:.2em 0;letter-spacing:.08em;background:linear-gradient(90deg,#fff,var(--gold),var(--blue));-webkit-background-clip:text;color:transparent}
+.hero h2{font-weight:400;color:var(--blue)}.hero p{opacity:.8;max-width:620px;margin:8px auto}
+#map{width:min(100%,980px);margin:16px auto;filter:drop-shadow(0 18px 24px #000a) drop-shadow(0 0 22px #3a8dff44)}
+#map path{fill:#16336e;stroke:#9cc9ff;stroke-width:.7;transition:.2s}#map path.sh{fill:#071535;stroke:none;pointer-events:none}#map path:hover{fill:#e5c066aa}#map circle{fill:var(--gold);stroke:#fff;stroke-width:1.5}
+#tip{min-height:1.5em;color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:12px}
+.c2{background:linear-gradient(160deg,#0f6b4a44,#e5c06622)}.c3{background:linear-gradient(160deg,#7a45d044,#c9d1e022)}
+.ico{font-size:2.6rem}.card p{flex:1;font-size:.93rem;opacity:.9;line-height:1.5;margin:0}
+.note{font-size:.85rem;opacity:.7;text-align:center;margin-top:14px}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;padding:16px;overflow:auto}.modal.on{display:flex}
+.box{background:#0b1430;border:1px solid var(--line);border-radius:20px;padding:24px;max-width:560px;width:100%;text-align:center}
+input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0006;color:var(--t);font:inherit;margin:10px 0}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,120px);background:var(--gold);color:#1a1200;padding:12px 22px;border-radius:30px;font-weight:700;transition:.3s;z-index:60}#toast.on{transform:translate(-50%,0)}#toast.err{background:#ff6b6b;color:#fff}
+.big{font-size:clamp(1.8rem,6vw,3.2rem);font-weight:800;color:var(--gold)}
+.bar{height:10px;border-radius:6px;background:#fff2;overflow:hidden;margin:6px 0 14px}.bar i{display:block;height:100%;transition:width 1s}
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start}
+.cw{position:relative;max-width:380px;margin:auto;width:100%}.ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;font-weight:800}
+.win{border:2px solid var(--gold);box-shadow:0 0 30px #e5c06655}
+#adm{display:none;position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;max-width:none;padding-top:calc(24px + env(safe-area-inset-top,0px))}
+.ok{font-size:4rem;animation:pop .6s}@keyframes pop{from{transform:scale(0)}}
+@media print{body *{visibility:hidden}#adm,#adm *{visibility:visible}#adm{position:absolute;display:block!important}button,textarea,.noprint{display:none!important}}
+</style></head><body>
+<nav><div class="logo">O‘ZBEKISTON KELAJAGI</div><div class="row" style="margin:0"><button class="pri" onclick="go('vote')">OVOZ BERISH</button><button onclick="openM('m-re')">QAYTA OVOZ BERISH</button><button onclick="openM('m-login')">NATIJANI TEKSHIRISH</button></div></nav>
+
+<section class="hero"><h1>O‘ZBEKISTON KELAJAGI</h1><h2>Jamiyat taraqqiyotining qaysi yo‘lini tanlaysiz?</h2>
+<p>Sizning fikringiz muhim. Tanlovingizni bildiring va umumiy natijalarga o‘z hissangizni qo‘shing.</p>
+<svg id="map" viewBox="0 0 600 400"></svg><div id="tip">Hududni tanlang (chegaralar taxminiy)</div>
+<button class="pri" onclick="go('vote')">OVOZ BERISHGA O‘TISH</button></section>
+
+<section id="vote"><h2 style="text-align:center">SIZ QAYSI YO‘LNI TANLAYSIZ?</h2>
+<p class="note" style="font-size:1rem">Quyidagi variantlarni o‘rganing va o‘z qarashingizga mos tanlovni belgilang. Bu o‘quv simulyatsiyasi bo‘lib, fikrlar o‘rganiladi.</p>
+<div id="status" class="note"></div>
+<div class="grid"><div class="card c2"><div class="ico">🕌✨</div><h3>DINIY QADRIYATLARGA ASOSLANGAN DAVLAT</h3><p>Diniy qadriyatlar va e'tiqodga asoslangan tamoyillar davlat siyosati va jamiyat hayotida muhim o‘rin tutadi. Bunday modelda qonunchilik va fuqarolarning huquqlari qanday belgilanishi davlatning muayyan tizimiga bog‘liq.</p><button class="pri vb" onclick="pick(1)">DINIY QADRIYATLAR YO‘LINI TANLAYMAN</button></div>
+<div class="card c3"><div class="ico">🔷🤝</div><h3>UMUMIY SIYOSIY MAFKURAGA ASOSLANGAN DAVLAT</h3><p>Davlat siyosati jamiyatni birlashtiruvchi muayyan siyosiy mafkura, umumiy g‘oya va taraqqiyot maqsadlariga asoslanadi. Bunday yondashuvning natijalari mafkuraning mazmuni va siyosiy tizimga bog‘liq.</p><button class="pri vb" onclick="pick(2)">UMUMIY MAFKURA YO‘LINI TANLAYMAN</button></div></div>
+<p class="note">Variantlar real davlatlarning mukammal tavsifi emas, balki muhokama uchun soddalashtirilgan konseptual modellardir.</p></section>
+
+<div class="modal" id="m-conf"><div class="box"><h3>Siz ushbu variantni tanladingiz.</h3><p id="cname" class="big" style="font-size:1.2rem"></p><p>Tanlovingizni tasdiqlaysizmi?</p><div class="row"><button class="pri" onclick="confirmVote()">TASDIQLASH</button><button onclick="closeM('m-conf')">ORTGA QAYTISH</button></div></div></div>
+<div class="modal" id="m-done"><div class="box"><div class="ok">✅</div><h3>TANLOVINGIZ QABUL QILINDI!</h3><p>Sizning fikringiz umumiy natijalarni shakllantirishga hissa qo‘shdi.</p><button class="pri" onclick="copyReceipt()">NATIJANI NUSXALASH</button><div class="row"><button onclick="closeM('m-done')">YOPISH</button></div></div></div>
+<div class="modal" id="m-login"><div class="box"><h3>MAXFIY BOSHQARUV PANELI</h3><p>Bu bo‘lim faqat vakolatli boshqaruvchi uchun mo‘ljallangan.</p><input id="pw" type="password" placeholder="Maxfiy kirish kodi" onkeydown="if(event.key==='Enter')login()"><div id="lerr" style="color:#ff8a8a"></div><div class="row"><button class="pri" onclick="login()">KIRISH</button><button onclick="closeM('m-login')">YOPISH</button></div></div></div>
+<div class="modal" id="m-re"><div class="box"><h3>QAYTA OVOZ BERISH</h3><p>Qayta ovoz berish uchun maxfiy kodni kiriting.</p><input id="rpw" type="password" placeholder="Maxfiy kirish kodi" onkeydown="if(event.key==='Enter')reVote()"><div id="rerr" style="color:#ff8a8a"></div><div class="row"><button class="pri" onclick="reVote()">DAVOM ETISH</button><button onclick="closeM('m-re')">YOPISH</button></div></div></div>
+<div class="modal" id="m-copy"><div class="box"><h3>Matnni qo‘lda nusxalang</h3><textarea id="ctext" rows="10" readonly></textarea><button onclick="closeM('m-copy')">YOPISH</button></div></div>
+
+<section id="adm"><div class="row noprint" style="justify-content:space-between;margin:0 0 14px"><div class="big" id="total">JAMI OVOZLAR: 0</div><div class="row" style="margin:0"><button class="pri" onclick="showResult()">NATIJANI KO‘RSATISH</button><button onclick="fs()">TO‘LIQ EKRAN</button><button onclick="logout()">CHIQISH</button></div></div>
+<div class="dash"><div class="card"><div class="cw"><canvas id="ch"></canvas><div class="ctr"><span>JAMI</span><span id="cc" class="big" style="font-size:2rem">0</span><span>OVOZ</span></div></div></div><div class="card" id="stats"></div></div>
+<div class="card" id="winner" style="margin:18px 0;text-align:center"></div>
+<div class="card noprint"><h3>OVOZ KODLARINI QO‘SHISH</h3><p class="note" style="text-align:left">Ishtirokchilar yuborgan tasdiq xabarlarini (Telegram guruhidan nusxalab) shu yerga joylang. Takroriy va yaroqsiz kodlar hisobga olinmaydi.</p>
+<textarea id="paste" rows="5" placeholder="BK-XXXX-XXXX"></textarea><div class="row"><button class="pri" onclick="addCodes()">QO‘SHISH VA HISOBLASH</button></div><div id="addres" class="note"></div><div class="row"><input id="fc" placeholder="Kodni tekshirish: BK-XXXX-XXXX" style="max-width:280px;margin:0"><button onclick="findCode()">TEKSHIRISH</button></div><div id="fres" class="note"></div></div>
+<div class="row noprint"><button class="pri" onclick="copyAll()">BARCHA NATIJALARNI NUSXALASH</button><button onclick="copyCodes()">BARCHA TASDIQ KODLARINI NUSXALASH</button><button onclick="dl('txt')">TXT</button><button onclick="dl('csv')">CSV</button><button onclick="window.print()">PDF (chop etish)</button><button style="border-color:#ff6b6b;color:#ff9a9a" onclick="clearAll()">NATIJANI TOZALASH</button></div></section>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const HASH="96809438316c8c5ee7ed72fd955059186243658792637085017ae300b48a3a00";
+const OPT=[1,2],N={1:"Diniy qadriyatlarga asoslangan davlat",2:"Umumiy siyosiy mafkuraga asoslangan davlat"},COL={1:"#e5c066",2:"#a77bff"},ICO={1:"🕌",2:"🔷"};
+const $=id=>document.getElementById(id);
+let choice=0,chart=null,fails=0,lockTil=0;
+const store=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+function toast(m,e){const t=$("toast");t.textContent=m;t.className="on"+(e?" err":"");setTimeout(()=>t.className="",2600)}
+const go=id=>$(id).scrollIntoView({behavior:"smooth"}),openM=id=>$(id).classList.add("on"),closeM=id=>$(id).classList.remove("on");
+const pct=(n,t)=>t>0?n/t*100:0;
+// ---- kod: tasodifiy, tanlov ichida niqoblangan, nazorat summasi bilan
+function fnv(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)&65535}
+const hx=(n,l)=>n.toString(16).toUpperCase().padStart(l,"0");
+function makeCode(c){const R=hx(crypto.getRandomValues(new Uint32Array(1))[0]&1048575,5),S=R+hx((fnv("uk"+R)+c*977)&4095,3);return`BK-${S.slice(0,4)}-${S.slice(4)}`}
+function decode(code){const t=code.toUpperCase().replace(/^BK-/,"").replace(/-/g,"");if(!/^[0-9A-F]{8}$/.test(t))return 0;const R=t.slice(0,5),k=parseInt(t.slice(5),16);for(const c of[1,2])if(((fnv("uk"+R)+c*977)&4095)===k)return c;return 0}
+// ---- ovoz berish (brauzerda)
+function refresh(){const d=store("uk_done");$("status").textContent=d?"Siz ovoz berdingiz. Qayta ovoz berish uchun menyudagi «QAYTA OVOZ BERISH» tugmasidan foydalaning.":"";document.querySelectorAll(".vb").forEach(b=>b.disabled=!!d)}
+function pick(c){choice=c;$("cname").textContent=N[c];openM("m-conf")}
+function codes(){try{return JSON.parse(store("uk_codes2")||"[]")}catch(e){return[]}}
+function confirmVote(){if(store("uk_done"))return toast("Bir martalik token allaqachon ishlatilgan.",1);
+  const c=makeCode(choice);store("uk_done","1");store("uk_code",c);
+  closeM("m-conf");openM("m-done");refresh()}
+async function copyText(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){$("ctext").value=t;openM("m-copy");$("ctext").select()}}
+function copyReceipt(){const c=store("uk_code");if(!c)return toast("Kod topilmadi",1);
+  copyText(`O‘ZBEKISTON KELAJAGI — OVOZ BERISH TASDIG‘I\n\nTasdiq kodi: ${c}\n\nHolat: Ovoz muvaffaqiyatli qayd etildi.\n\nBu kod ovoz qabul qilinganini tasdiqlaydi.\n\nUshbu tasdiqni taqdimot guruhiga yuboring.`,"NUSXALANDI")}
+// ---- admin (faqat brauzer: haqiqiy himoya emas)
+async function login(){if(Date.now()<lockTil)return $("lerr").textContent="Biroz kuting (60 soniya).";
+  const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("uk:"+$("pw").value)),h=[...new Uint8Array(b)].map(x=>hx(x,2).toLowerCase()).join("");
+  if(h===HASH){fails=0;$("pw").value="";$("lerr").textContent="";closeM("m-login");$("adm").style.display="block";toast("Boshqaruv paneliga kirish muvaffaqiyatli!");render()}
+  else{if(++fails>=5){lockTil=Date.now()+6e4;fails=0}$("lerr").textContent="Maxfiy kod noto‘g‘ri."}}
+async function pwOk(p){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("uk:"+p));return[...new Uint8Array(b)].map(x=>hx(x,2).toLowerCase()).join("")===HASH}
+async function reVote(){if(Date.now()<lockTil)return $("rerr").textContent="Biroz kuting (60 soniya).";
+ if(await pwOk($("rpw").value)){fails=0;$("rpw").value="";$("rerr").textContent="";store("uk_done","");closeM("m-re");refresh();toast("Qayta ovoz berish ochildi");go("vote")}
+ else{if(++fails>=5){lockTil=Date.now()+6e4;fails=0}$("rerr").textContent="Maxfiy kod noto‘g‘ri."}}
+function findCode(){const m=$("fc").value.match(/BK-[0-9A-F]{4}-[0-9A-F]{4}/i);if(!m)return $("fres").textContent="❌ Kod formati noto‘g‘ri.";const k=m[0].toUpperCase();
+ $("fres").textContent=!decode(k)?"❌ Yaroqsiz kod.":codes().some(x=>x.toUpperCase()===k)?"✅ To‘g‘ri kod, hisobga olingan.":"✅ To‘g‘ri kod, lekin hali hisobga qo‘shilmagan."}
+function logout(){$("adm").style.display="none";if(document.fullscreenElement)document.exitFullscreen()}
+function tally(){const c={1:0,2:0},seen=new Set();codes().forEach(x=>{const d=decode(x),k=x.toUpperCase();if(d&&!seen.has(k)){seen.add(k);c[d]++}});return{c,t:c[1]+c[2],list:[...seen]}}
+function addCodes(){const m=$("paste").value.match(/BK-[0-9A-F]{4}-[0-9A-F]{4}/gi)||[];const a=codes(),have=new Set(a.map(x=>x.toUpperCase()));let n=0,dup=0,bad=0;
+  m.forEach(x=>{const k=x.toUpperCase();if(!decode(k))bad++;else if(have.has(k))dup++;else{have.add(k);a.push(k);n++}});
+  store("uk_codes2",JSON.stringify(a));$("addres").textContent=`Yangi: ${n} • Takroriy: ${dup} • Yaroqsiz: ${bad}`;toast(m.length?`${n} ta to‘g‘ri kod hisoblandi`:"Kod topilmadi",!m.length);$("paste").value="";render()}
+function clearAll(){if(confirm("Barcha qo‘shilgan kodlar va natijalar o‘chiriladi. Bu amalni qaytarib bo‘lmaydi (avval natijani nusxalab oling). Davom etasizmi?")){store("uk_codes2","[]");store("uk_done","");store("uk_code","");$("addres").textContent="";$("fres").textContent="";if(chart){chart.destroy();chart=null}render();refresh();toast("Natijalar tozalandi")}}
+function winner(){const{c,t}=tally();if(!t)return null;const m=Math.max(c[1],c[2]);return m?OPT.filter(i=>c[i]===m):null}
+function render(){const{c,t}=tally(),w=winner();$("total").textContent="JAMI OVOZLAR: "+t;$("cc").textContent=t;
+  $("stats").innerHTML=(t?"":"<p>Ovozlar hali mavjud emas.</p>")+OPT.map(i=>`<div><div style="display:flex;justify-content:space-between;gap:8px"><b>${ICO[i]} ${N[i]}</b><span>${c[i]} ta • ${pct(c[i],t).toFixed(1)}%</span></div><div class="bar"><i style="width:${pct(c[i],t)}%;background:${COL[i]}"></i></div></div>`).join("");
+  const el=$("winner");el.className="card"+(w&&w.length==1?" win":"");
+  el.innerHTML=!t?"Hali ovoz berilmagan — g‘olib ko‘rsatilmaydi.":w.length>1?`<div class="big">DURANG — BIR NECHTA VARIANT TENG NATIJA QAYD ETDI</div>`:`<div>ENG KO‘P TANLANGAN VARIANT</div><div class="big">${N[w[0]]}</div><div>${c[w[0]]} ovoz • ${pct(c[w[0]],t).toFixed(1)}%</div>`;
+  if(t)el.innerHTML+='<p class="note">Bu natija faqat ishtirokchilar fikrini ifodalaydi.</p>';
+  const v=OPT.map(i=>c[i]);
+  if(!chart)chart=new Chart($("ch"),{type:"doughnut",data:{labels:OPT.map(i=>N[i]),datasets:[{data:v,backgroundColor:OPT.map(i=>COL[i]),borderWidth:0}]},options:{cutout:"68%",animation:{duration:1200},plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>` ${x.label}: ${x.raw} ta (${pct(x.raw,t).toFixed(1)}%)`}}}}});
+  else{chart.data.datasets[0].data=v;chart.update()}}
+function showResult(){chart.destroy();chart=null;render();const t=tally().t;let n=0;const id=setInterval(()=>{n=Math.min(t,n+Math.ceil(t/30)||1);$("cc").textContent=n;if(n>=t)clearInterval(id)},35);toast("Natija ko‘rsatildi")}
+function fs(){const a=$("adm");a.requestFullscreen?a.requestFullscreen().catch(()=>toast("To‘liq ekran ishlamadi",1)):toast("To‘liq ekran qo‘llab-quvvatlanmaydi",1)}
+function summary(){const{c,t}=tally(),w=winner();return`O‘ZBEKISTON KELAJAGI — OVOZ BERISH NATIJALARI\nJami ishtirokchilar: ${t}\n\n`+OPT.map((i,k)=>`${k+1}. ${N[i]} — ${c[i]} ta ovoz (${pct(c[i],t).toFixed(1)}%)`).join("\n")+`\n\nEng ko‘p tanlangan variant: ${!w?"aniqlanmadi":w.length>1?"durang":N[w[0]]}.\nNatijalar shakllantirilgan sana va vaqt: ${new Date().toLocaleString("uz-UZ")}`}
+const copyAll=()=>copyText(summary(),"Barcha natijalar nusxalandi!");
+const copyCodes=()=>copyText(tally().list.join("\n")||"(kodlar yo‘q)","Barcha tasdiq kodlari nusxalandi!");
+function dl(f){const{c,t}=tally(),txt=f=="txt"?summary():"\uFEFFvariant,ovozlar,foiz\n"+OPT.map(i=>`"${N[i]}",${c[i]},${pct(c[i],t).toFixed(1)}`).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain"}));a.download=f=="txt"?"natijalar.txt":"statistika.csv";a.click();toast("Fayl yuklandi")}
+// ---- xarita (taxminiy chegaralar)
+const OL=[[56,41.3],[56,44.5],[58.6,45.6],[61,44.3],[62.5,43.6],[65.5,43.5],[66.5,42.2],[68,41],[69.5,41.6],[70.9,42.3],[71.3,42.2],[72.4,41.4],[73.2,40.9],[72.4,40.3],[71,40.2],[70.4,40],[69,40.2],[68,39.5],[67.7,39],[67.4,38.2],[67.8,37.2],[66.5,37.4],[65.6,37.3],[64.6,38],[64.2,38.9],[62.5,39.9],[61.2,41.2],[60.5,41.8],[59.9,42.3],[58.5,42],[57,41.3]];
+const SEEDS=[["Qoraqalpog‘iston Respublikasi",58.3,43.7,14],["Xorazm viloyati",60.6,41.4,0],["Navoiy viloyati",64.8,41,4],["Buxoro viloyati",63.6,39.8,2],["Qashqadaryo viloyati",65.8,38.6,1],["Surxondaryo viloyati",67.4,37.8,0],["Samarqand viloyati",66.9,39.7,0],["Jizzax viloyati",67.8,40.1,0],["Sirdaryo viloyati",68.7,40.6,0],["Toshkent viloyati",69.9,41.3,0],["Namangan viloyati",71.6,41.2,0],["Farg‘ona viloyati",71.6,40.4,0],["Andijon viloyati",72.5,40.8,0]];
+function clip(p,a,b,c){const o=[];for(let i=0;i<p.length;i++){const u=p[i],v=p[(i+1)%p.length],fu=a*u[0]+b*u[1]-c,fv=a*v[0]+b*v[1]-c;if(fu<=0)o.push(u);if(fu*fv<0){const t=fu/(fu-fv);o.push([u[0]+t*(v[0]-u[0]),u[1]+t*(v[1]-u[1])])}}return o}
+(function(){const k=.75,P=OL.map(([x,y])=>[x*k,y]),S=SEEDS.map(([n,x,y,w])=>[n,x*k,y,w]);
+ const cells=S.map((s,i)=>{let p=P;S.forEach((t,j)=>{if(i!=j&&p.length)p=clip(p,2*(t[1]-s[1]),2*(t[2]-s[2]),t[1]**2+t[2]**2-t[3]-s[1]**2-s[2]**2+s[3])});return[s[0],p]});
+ const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),x0=Math.min(...xs),y1=Math.max(...ys),sc=Math.min(560/(Math.max(...xs)-x0),340/(y1-Math.min(...ys)));
+ const T=([x,y])=>(20+(x-x0)*sc).toFixed(1)+","+(20+(y1-y)*sc).toFixed(1),d=p=>"M"+p.map(T).join("L")+"Z",tc=T([69.28*k,41.31]).split(",");
+ $("map").innerHTML=cells.map(c=>`<path class="sh" d="${d(c[1])}" transform="translate(0,9)"/>`).join("")+cells.map(c=>`<path data-n="${c[0]}" d="${d(c[1])}"/>`).join("")+`<circle cx="${tc[0]}" cy="${tc[1]}" r="5" data-n="Toshkent shahri"/>`;
+ $("map").onmouseover=$("map").onclick=e=>{if(e.target.dataset&&e.target.dataset.n)$("tip").textContent=e.target.dataset.n}})();
+refresh();
+</script></body></html>
